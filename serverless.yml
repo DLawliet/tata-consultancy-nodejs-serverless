@@ -1,0 +1,98 @@
+service: serverless-node-tata-api-star-wars
+frameworkVersion: '3'
+configValidationMode: off
+
+plugins:
+  - serverless-ignore
+  - serverless-dynamodb-local
+  - serverless-offline
+  - serverless-s3-sync
+  - serverless-openapi-documentation-v2
+
+custom:
+  dynamodb:
+    stages:
+      - dev
+    start:
+      port: 8000
+      inMemory: true
+      migrate: true
+    migration:
+      dir: src/offline/migrations
+  openapiBucket: s3-tata-openapi-star-wars-${self:provider.stage}
+  documentation: ${file(serverless.doc.yml):documentation}
+  s3Sync:
+    - bucketName: ${self:custom.openapiBucket}
+      localDir: docs/openapi
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  stage: ${opt:stage, 'dev'}
+  region: ${opt:region, 'us-west-2'}
+  lambdaHashingVersion: 20220521
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:*
+      Resource:
+        - arn:aws:dynamodb:us-west-2:284882870557:table/PlanetTable
+
+functions:
+  createPlanet:
+    handler: src/functions/planets/create.createPlanet
+    events:
+      - http:
+          path: api/planets
+          method: post
+          documentation: ${file(serverless.doc.yml):documentation.endpoints.createPlanet}
+  listPlanets:
+    handler: src/functions/planets/paginate.listPaginate
+    events:
+      - http:
+          path: api/planets
+          method: get
+
+resources:
+  Resources:
+    PlanetTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: PlanetTable
+        BillingMode: PAY_PER_REQUEST
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+    StaticSite:
+      Type: AWS::S3::Bucket
+      Properties:
+        AccessControl: PublicRead
+        BucketName: ${self:custom.openapiBucket}
+        WebsiteConfiguration:
+          IndexDocument: index.html
+
+StaticSiteS3BucketPolicy:
+  Type: AWS::S3::BucketPolicy
+  Properties:
+    Bucket:
+      Ref: StaticSite
+    PolicyDocument:
+      Statement:
+        - Sid: PublicReadGetObject
+          Effect: Allow
+          Principal: "*"
+          Action:
+          - s3:GetObject
+          Resource:
+            Fn::Join: [
+              "", [
+                "arn:aws:s3:::",
+                {
+                  "Ref": "StaticSite"
+                },
+                "/*"
+              ]
+            ]

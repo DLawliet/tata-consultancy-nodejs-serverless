@@ -1,0 +1,117 @@
+{
+  "openapi": "3.0.0",
+  "components": {
+    "schemas": {
+      "ErrorResponse": {
+        "properties": {
+          "error": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "CreatePlanetRequest": {
+        "properties": {
+          "clima": {
+            "type": "string"
+          },
+          "diametro": {
+            "type": "string"
+          },
+          "gravedad": {
+            "type": "string"
+          },
+          "nombre": {
+            "type": "string"
+          },
+          "periodo_orbital": {
+            "type": "string"
+          },
+          "poblacion": {
+            "type": "string"
+          },
+          "periodo_rotacion": {
+            "type": "string"
+          },
+          "superficie_agua": {
+            "type": "string"
+          },
+          "terreno": {
+            "type": "string"
+          }
+        }
+      },
+      "CreatePlanetResponse": {
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "clima": {
+            "type": "string"
+          },
+          "diametro": {
+            "type": "string"
+          },
+          "gravedad": {
+            "type": "string"
+          },
+          "nombre": {
+            "type": "string"
+          },
+          "periodo_orbital": {
+            "type": "string"
+          },
+          "poblacion": {
+            "type": "string"
+          },
+          "periodo_rotacion": {
+            "type": "string"
+          },
+          "superficie_agua": {
+            "type": "string"
+          },
+          "terreno": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "securitySchemes": {}
+  },
+  "info": {
+    "title": "Api Star Wars",
+    "description": "Esta api es un clon de la api de star wars",
+    "version": "1"
+  },
+  "servers": [],
+  "paths": {
+    "/api/planets": {
+      "post": {
+        "operationId": "createPlanet",
+        "summary": "Crear un planeta",
+        "description": "Crea un planeta y lo registra en DynamoDB",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Ok creacion del planeta",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreatePlanetResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

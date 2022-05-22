@@ -1,0 +1,83 @@
+documentation:
+  version: "1"
+  title: "Api Star Wars"
+  description: "Esta api es un clon de la api de star wars"
+  endpoints:
+    createPlanet:
+      summary: "Crear un planeta"
+      description: "Crea un planeta y lo registra en DynamoDB"
+      requestBody:
+        description: "Datos completos del planeta"
+      methodResponses:
+        - statusCode: 200
+          responseBody:
+            description: "Ok creacion del planeta"
+          responseModels:
+            application/json: "CreatePlanetResponse"
+  models:
+    - name: "ErrorResponse"
+      description: "Un error en la aplicacion"
+      contentType: "application/json"
+      schema:
+        $schema: "http://json-schema.org/draft-04/schema#"
+        properties:
+          error:
+            type: "string"
+          message:
+            type: "string"
+    - name: "CreatePlanetRequest"
+      description: "Datos para la creacion de un planeta"
+      contentType: "application/json"
+      schema:
+        $schema: "http://json-schema.org/draft-04/schema#"
+        properties:
+          clima:
+            type: "string"
+          diametro:
+            type: "string"
+          gravedad:
+            type: "string"
+          nombre:
+            type: "string"
+          periodo_orbital:
+            type: "string"
+          poblacion:
+            type: "string"
+          periodo_rotacion:
+            type: "string"
+          superficie_agua:
+            type: "string"
+          terreno:
+            type: "string"
+    - name: "CreatePlanetResponse"
+      description: "Respuesta de la creacion de un planeta"
+      contentType: "application/json"
+      schema:
+        $schema: "http://json-schema.org/draft-04/schema#"
+        properties:
+          id:
+            type: "string"
+          clima:
+            type: "string"
+          diametro:
+            type: "string"
+          gravedad:
+            type: "string"
+          nombre:
+            type: "string"
+          periodo_orbital:
+            type: "string"
+          poblacion:
+            type: "string"
+          periodo_rotacion:
+            type: "string"
+          superficie_agua:
+            type: "string"
+          terreno:
+            type: "string"
+          createdAt:
+            type: "string"
+          updatedAt:
+            type: "string"
+      
+
