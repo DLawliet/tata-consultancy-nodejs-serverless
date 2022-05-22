@@ -7,7 +7,9 @@
   "scripts": {
     "start": "sls offline start",
     "deploy": "sls deploy",
-    "openapi": "sls openapi generate -o src/docs/openapi.json -f json"
+    "openapi": "sls openapi generate -o src/docs/openapi.json -f json",
+    "test": "jest",
+    "test:coverage": "npm run test -- --coverage"
   },
   "dependencies": {
     "@middy/core": "^3.0.3",
@@ -19,16 +21,13 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
-    "@openapitools/openapi-generator-cli": "^2.5.1",
+    "@types/jest": "^27.5.1",
     "aws-sdk": "^2.791.0",
-    "husky": "^7.0.2",
+    "jest": "^28.1.0",
+    "joi": "^17.6.0",
     "serverless-dynamodb-local": "^0.2.39",
     "serverless-ignore": "^0.2.1",
     "serverless-offline": "^6.8.0",
-    "serverless-openapi-documentation-v2": "^0.4.6",
-    "serverless-s3-sync": "^3.0.0",
-    "serverless-webpack": "^5.5.1",
-    "webpack": "^5.51.1",
-    "webpack-node-externals": "^3.0.0"
+    "serverless-openapi-documentation-v2": "^0.4.6"
   }
 }

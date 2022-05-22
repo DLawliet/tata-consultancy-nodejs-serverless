@@ -6,7 +6,6 @@ const { validateCreatePlanet } = require('../../services/planets.validate');
 const { createPlanetInDB } = require('../../services/planets.service');
 
 const createPlanet = async (event) => {
-
     validateCreatePlanet(event.body);
     const data = await createPlanetInDB(event.body);
     
