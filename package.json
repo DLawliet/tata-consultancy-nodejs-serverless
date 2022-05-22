@@ -5,18 +5,23 @@
   "keywords": [],
   "author": "JDGM",
   "scripts": {
+    "start": "sls offline start",
     "deploy": "sls deploy",
-    "openapi": "sls openapi generate -o docs/openapi.json -f json"
+    "openapi": "sls openapi generate -o src/docs/openapi.json -f json"
   },
   "dependencies": {
     "@middy/core": "^3.0.3",
     "@middy/http-json-body-parser": "^3.0.3",
     "aws-sdk": "^2.1140.0",
+    "express": "^4.18.1",
+    "serverless-http": "^3.0.1",
+    "swagger-ui-express": "^4.4.0",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@openapitools/openapi-generator-cli": "^2.5.1",
     "aws-sdk": "^2.791.0",
+    "husky": "^7.0.2",
     "serverless-dynamodb-local": "^0.2.39",
     "serverless-ignore": "^0.2.1",
     "serverless-offline": "^6.8.0",

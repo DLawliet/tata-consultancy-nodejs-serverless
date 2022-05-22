@@ -6,8 +6,8 @@ plugins:
   - serverless-ignore
   - serverless-dynamodb-local
   - serverless-offline
-  - serverless-s3-sync
   - serverless-openapi-documentation-v2
+  # - serverless-s3-sync
 
 custom:
   dynamodb:
@@ -19,11 +19,11 @@ custom:
       migrate: true
     migration:
       dir: src/offline/migrations
-  openapiBucket: s3-tata-openapi-star-wars-${self:provider.stage}
+  # openapiBucket: s3-tata-openapi-star-wars-${self:provider.stage}
   documentation: ${file(serverless.doc.yml):documentation}
-  s3Sync:
-    - bucketName: ${self:custom.openapiBucket}
-      localDir: docs/openapi
+  # s3Sync:
+  #   - bucketName: ${self:custom.openapiBucket}
+  #     localDir: docs/swagger
 
 provider:
   name: aws
@@ -39,6 +39,11 @@ provider:
         - arn:aws:dynamodb:us-west-2:284882870557:table/PlanetTable
 
 functions:
+  openapi:
+    handler: src/functions/swagger/openapi.openapi
+    events:
+      - http: ANY /api-docs
+      - http: 'ANY {proxy+}'
   createPlanet:
     handler: src/functions/planets/create.createPlanet
     events:
@@ -66,33 +71,33 @@ resources:
         KeySchema:
           - AttributeName: id
             KeyType: HASH
-    StaticSite:
-      Type: AWS::S3::Bucket
-      Properties:
-        AccessControl: PublicRead
-        BucketName: ${self:custom.openapiBucket}
-        WebsiteConfiguration:
-          IndexDocument: index.html
+#     StaticSite:
+#       Type: AWS::S3::Bucket
+#       Properties:
+#         AccessControl: PublicRead
+#         BucketName: ${self:custom.openapiBucket}
+#         WebsiteConfiguration:
+#           IndexDocument: index.html
 
-StaticSiteS3BucketPolicy:
-  Type: AWS::S3::BucketPolicy
-  Properties:
-    Bucket:
-      Ref: StaticSite
-    PolicyDocument:
-      Statement:
-        - Sid: PublicReadGetObject
-          Effect: Allow
-          Principal: "*"
-          Action:
-          - s3:GetObject
-          Resource:
-            Fn::Join: [
-              "", [
-                "arn:aws:s3:::",
-                {
-                  "Ref": "StaticSite"
-                },
-                "/*"
-              ]
-            ]
+# StaticSiteS3BucketPolicy:
+#   Type: AWS::S3::BucketPolicy
+#   Properties:
+#     Bucket:
+#       Ref: StaticSite
+#     PolicyDocument:
+#       Statement:
+#         - Sid: PublicReadGetObject
+#           Effect: Allow
+#           Principal: "*"
+#           Action:
+#           - s3:GetObject
+#           Resource:
+#             Fn::Join: [
+#               "", [
+#                 "arn:aws:s3:::",
+#                 {
+#                   "Ref": "StaticSite"
+#                 },
+#                 "/*"
+#               ]
+#             ]
